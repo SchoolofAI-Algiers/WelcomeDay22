@@ -6,3 +6,4 @@ package-lock.json
 # Ignore artifacts:
 build
 coverage
+.next
