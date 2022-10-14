@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <Head>
-        <title>SOAI website</title>
+        <title>Welcome Day SOAI</title>
       </Head>
       <div className="bg-gray-600 flex flex-col justify-around items-center min-h-screen text-white">
         <Greetings />
