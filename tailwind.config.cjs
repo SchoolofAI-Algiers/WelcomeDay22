@@ -12,6 +12,12 @@ module.exports = {
       },
       gridColumnStart: {
         '22': '22',
+        '25': '25',
+      },
+     
+      gridColumn: {
+        'span-20': 'span 19 / span 19',
+        'span-27': 'span 27 / span 27',
       },
      
       colors: {
