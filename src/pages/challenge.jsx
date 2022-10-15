@@ -1,24 +1,8 @@
 import React, { useState } from 'react'
-
+import { data } from 'data.json'
 export default function Challenges() {
-    const players = [
-        {
-                id:1,
-                name:'yassine' ,
-                points:100
-        },
-        {
-            id:2,
-            name:'wajih' ,
-            points:90
-        },
-        {
-        id:3,
-        name:'yasser' ,
-        points:150
-        }
-
-]
+  console.log(data);
+    const players = data.stringify();
       
       const [width, setWidth] = useState(128);
       if (typeof window != undefined) {
