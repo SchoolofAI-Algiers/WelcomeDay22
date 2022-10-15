@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { data } from 'data.json'
+import  data  from 'data.json'
 export default function Challenges() {
-  console.log(data);
+  console.log(data)
     const players = data.stringify();
       
       const [width, setWidth] = useState(128);
