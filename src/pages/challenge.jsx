@@ -49,7 +49,7 @@ export default function Challenges() {
     <div className=' md:mt-0 mx-8 md:mx-0 md:col-start-22 md:col-span-4  md:row-start-2 md:row-span-5  flex justify-start   flex-col items-center'>
         <div className='w-9/12 h-8 lg:h-12 bg-LEADERBOARD 
         rounded-md flex justify-center z-10 items-center '> 
-        <h3 className='text-white font-normal lg:font-semibold  text-xs md:text-base   xl:text-lg'>leadBoard</h3></div>
+        <h3 className='text-white font-normal font-semibold   md:text-base   xl:text-lg'>leadBoard</h3></div>
         <div className ={`' w-full border-2 border-LEADERBOARD -mt-6 z-9 pt-8 h-full  flex flex-row space-x-2 md:flex-col flex-wrap'
         }'
          `}>
