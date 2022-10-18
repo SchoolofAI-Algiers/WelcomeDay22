@@ -13,16 +13,11 @@
 }
 
 .img-card > img,
-.img-card > #first-border,
-.img-card > #second-border,
-.img-card > #third-border {
-  transition-duration: 1000ms;
+.img-card > div,
+.highlight {
+  transition-duration: 750ms;
 }
 
-.img-card:hover > img,
-.img-card:hover > #first-border,
-.img-card:hover > #second-border,
-.img-card:hover > #third-border {
-  top: 0;
-  right: 0;
+.img-card:hover > #highlight {
+  display: block;
 }
