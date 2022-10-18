@@ -58,9 +58,9 @@ export default function Challenges() {
           {  (
   <div className='w-full flex h-screen overflow-hidden abolute top-0 left-0 z-50'>
   <img src='bgChallenges.png' onClick={() =>{setload(!load)}} className={`w-1/2  z-40 
-  ${(!load)&& 'transition ease-in-out delay-400 duration-1000 translate-x-[-50rem]'}   `}   />
+  ${(!load)&& 'transition ease-in-out delay-400 duration-1000  rotated'}   `}   />
    <img src='bgChallenges.png' className={`w-1/2  z-40 
-  ${(!load)&& 'transition ease-in-out delay-400 duration-1000 translate-x-[50rem]'}   `}   />
+  ${(!load)&& 'transition ease-in-out delay-400 duration-1000 translate-x-[50rem] rotated'}   `}   />
    
   </div>
 )}
