@@ -37,7 +37,7 @@ export default function Challenges() {
           <div className=' mt-24 md:mt-0 mx-8 md:mx-0 md:col-start-22 md:col-span-4 z-10 md:row-start-2 md:row-span-5  flex justify-start   flex-col items-center'>
               <div className='w-9/12 h-8 lg:h-12 bg-LEADERBOARD 
               rounded-md flex justify-center  items-center '> 
-              <h3 className='text-white font-normal lg:font-semibold z-10 text-xs md:text-base   xl:text-lg'>LeaderBoard</h3></div>
+              <h3 className='text-white font-normal lg:font-semibold z-10 text-xs md:text-base z-20  xl:text-lg'>LeaderBoard</h3></div>
               <div className ={`' w-full border-2 border-LEADERBOARD -mt-6 z-10 pt-8 h-full  flex flex-row space-x-2 md:flex-col flex-wrap'
               }'
                `}>
@@ -57,9 +57,11 @@ export default function Challenges() {
 
           {  (
   <div className='w-full flex h-screen overflow-hidden abolute top-0 left-0 z-50'>
-  <img src='bgChallenges.png' onClick={() =>{setload(!load)}} className={`w-1/2  z-40 
+  <img src='bgChallenges.png' onClick={() =>{setload(!load)}} 
+  className={`w-1/2  z-40 
   ${(!load)&& 'transition ease-in-out delay-400 duration-1000  translate-x-[-50rem] '}   `}   />
-   <img src='bgChallenges.png' className={`w-1/2  z-40 
+   <img src='bgChallenges.png' onClick={() =>{setload(!load)}}
+    className={`w-1/2  z-40 
   ${(!load)&& 'transition ease-in-out delay-400 duration-1000 translate-x-[50rem] '}   `}   />
    
   </div>
