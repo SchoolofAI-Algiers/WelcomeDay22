@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rotated :hover {
+     transform: perspective(3000px) rotateY(85deg);
+}
