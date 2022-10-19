@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Arcade";
+  src: url("../public/fonts/ARCADE_N.TTF");
+}
+
+.background {
+  background: #000 url("../public/images/background.svg") no-repeat;
+  background-size: cover;
+}
+
+.img-card > img,
+.img-card > div,
+.highlight {
+  transition-duration: 750ms;
+}
+
+.img-card:hover > #highlight {
+  display: block;
+}

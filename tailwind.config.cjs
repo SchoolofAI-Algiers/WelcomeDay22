@@ -3,6 +3,8 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        arcade: ["arcade", "sans-serif"],
        
       gridTemplateColumns: {
         '28': 'repeat(28, minmax(0, 1fr))',
