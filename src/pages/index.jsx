@@ -1,6 +1,7 @@
 //import { useState } from "react";
 //import Greetings from "../sections/Greetings.jsx";
 import Head from "next/head";
+import { Pong } from "../components/Pong";
 import Challenges from "../sections/Challenges";
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
           count is {count}
         </button>
   </div>*/}
-      <Challenges />
+      {/* <Challenges /> */}
+      <Pong />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import ChallengeCard from "../components/ChallengeCard";
+import { Pong } from "../components/Pong";
 
 export default function Challenges() {
   const ref = useRef();
@@ -71,6 +72,7 @@ export default function Challenges() {
           <div className="bg-[#E6A2C7] p-2 my-2 md:p-4 rounded-sm">
             start playing
           </div>
+          <Pong />
         </button>
       </div>
     </section>
