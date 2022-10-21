@@ -1,0 +1,157 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-white24{
+  background: #FFFFFF66;
+}
+html {
+  scroll-behavior: smooth;
+  font-family: 'arcade', sans-serif;
+}
+body {background-color: black;
+  background-image: url('../public/Asset.png');
+ 
+  background-repeat: repeat;
+  background-position: center;
+}
+
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+.background {
+  background-image: url('../public/Asset.png');
+  background-repeat: repeat-y;
+  background-position: top;
+
+}
+.img-card > img,
+.img-card > div,
+.highlight {
+  transition-duration: 750ms;
+}
+
+.img-card:hover > #highlight {
+  display: block;
+}
+.text-bleu {
+  --tw-text-opacity: 1;
+  color: rgb(111 203 220 / var(--tw-text-opacity));
+}
+
+.text-gold {
+  --tw-text-opacity: 1;
+  color: rgb(255 204 0 / var(--tw-text-opacity));
+}
+
+@font-face {
+  font-family: "arcade";
+  src: url('../public/ArcadeNormal-ZDZ.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+.mt1{
+  margin-top: 11rem;
+}
+
+.norm {
+    font-family: 'ROBOTO', sans-serif;
+}
+
+@keyframes Faq {
+     
+    /* Calculate the margin-left for
+  each of the slides */
+    0% {
+        height: 0;
+    }
+    50% {
+        height: 10px;
+    }
+    100% {
+        height:  20px;
+    }
+}  
+
+@keyframes Faq2 {
+     
+    /* Calculate the margin-left for
+  each of the slides */
+    0% {
+        height: 20px;
+    }
+    50% {
+        height: 10px;
+    }
+    100% {
+        height:  0px;
+    }
+} 
+.eventsContainer {
+  position: relative;
+  width: 70vw;
+  height: 60vh;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.next,
+.prev {
+  top: calc(50% - 20px);
+  position: absolute;
+  background: white;
+  color: black;
+  border-radius: 30px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  z-index: 2;
+}
+
+.next {
+  right: 10px;
+}
+
+.prev {
+  left: 10px;
+  transform: scale(-1);
+}
+
+.eventsImg {
+  position: absolute;
+  max-width: 80vw;
+}
+
+
+.active {
+    animation: Faq 0.1s ease-in-out  ;
+}
+.disabled  {
+    animation-fill-mode: forwards;
+    animation: Faq2 0.3s ease-in-out  ;
+    overflow: hidden;
+    display: none;
+}
