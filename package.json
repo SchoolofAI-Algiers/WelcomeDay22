@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prettier-write": "prettier ./src --write"
+    "prettier-write": "prettier ./src --write",
+    "backend": "py ./backend/main.py"
   },
   "dependencies": {
     "next": "^12.3.1",

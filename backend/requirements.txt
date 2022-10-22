@@ -1,0 +1,4 @@
+neat-python
+pygame
+flask
+flask_cors

@@ -11,6 +11,7 @@ import axios from "axios";
 const framePerSecond = 60;
 const width = "600";
 const height = "400";
+
 const PongContext = createContext({});
 function PongContextProvider({ children }) {
   const [ball] = useState({
@@ -54,7 +55,10 @@ function PongContextProvider({ children }) {
 }
 function PongContent() {
   const { ball, user, com, net } = useContext(PongContext);
-  // const [score, setScore] = useState(0);
+  const [gameover, setGameover] = useState(false);
+  const [score, setScore] = useState(0);
+  const [loop, setLoop] = useState(null);
+  const [username, setUsername] = useState("");
   const ref = useRef(null);
   function getMousePos(evt) {
     const rect = evt.target.getBoundingClientRect();
@@ -67,14 +71,17 @@ function PongContent() {
   }
   useEffect(() => {
     const ctx = ref.current?.getContext("2d");
-    // ctx.textAlign = "center";
+    ctx.textAlign = "center";
 
+    // const hit = new Audio("sounds/hit.mp3");
+    // const wall = new Audio("sounds/wall.mp3");
+    // const userScore = new Audio("sounds/comScore.mp3");
+    // const comScore = new Audio("sounds/userScore.mp3");
     function drawRect(x, y, w, h, color) {
       ctx.fillStyle = color;
       ctx.fillRect(x, y, w, h);
     }
 
-    // draw circle, will be used to draw the ball
     function drawArc(x, y, r, color) {
       ctx.fillStyle = color;
       ctx.beginPath();
@@ -83,7 +90,6 @@ function PongContent() {
       ctx.fill();
     }
 
-    // when COM or USER scores, we reset the ball
     function resetBall() {
       ball.speed = 8;
       ball.x = width / 2;
@@ -92,21 +98,18 @@ function PongContent() {
       ball.velocityY = (Math.round(Math.random()) * 2 - 1) * Math.random() * 3;
     }
 
-    // draw the net
     function drawNet() {
       for (let i = 0; i <= height; i += 15) {
         drawRect(net.x, net.y + i, net.width, net.height, net.color);
       }
     }
 
-    // draw text
     function drawText(text, x, y) {
       ctx.fillStyle = "#FFF";
       ctx.font = "75px fantasy";
       ctx.fillText(text, x, y);
     }
 
-    // collision detection
     function collision(b, p) {
       p.top = p.y;
       p.bottom = p.y + p.height;
@@ -126,68 +129,56 @@ function PongContent() {
       );
     }
 
-    // update function, the function that does all calculations
     function update(decision) {
-      // change the score of players, if the ball goes to the left "ball.x<0" computer win, else if "ball.x > canvas.width" the user win
       if (ball.x - ball.radius < 0) {
+        console.log("com win");
+        setScore(ball.score);
         ball.score = 0;
         com.score++;
         // comScore.play();
         resetBall();
+        setGameover(true);
       } else if (ball.x + ball.radius > width) {
+        console.log("user win");
+        setScore(ball.score);
         ball.score = 0;
         user.score++;
         // userScore.play();
         resetBall();
+        setGameover(true);
       }
 
-      // the ball has a velocity
       ball.x += ball.velocityX;
       ball.y += ball.velocityY;
 
-      // computer plays for itself, and we must be able to beat it
       // simple AI
       // com.y += (ball.y - (com.y + com.height / 2)) * 0.1;
+
       if (decision === 1) changePaddle(com, com.y - 5);
       else if (decision === 2) changePaddle(com, com.y + 5);
-      // when the ball collides with bottom and top walls we inverse the y velocity.
+
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > height) {
         ball.velocityY = -ball.velocityY;
         // wall.play();
       }
 
-      // we check if the paddle hit the user or the com paddle
       const player = ball.x + ball.radius < width / 2 ? user : com;
 
-      // if the ball hits a paddle
       if (collision(ball, player)) {
         ball.score++;
-        // play sound
         // hit.play();
-        // we check where the ball hits the paddle
         let collidePoint = ball.y - (player.y + player.height / 2);
-        // normalize the value of collidePoint, we need to get numbers between -1 and 1.
-        // -player.height/2 < collide Point < player.height/2
         collidePoint = collidePoint / (player.height / 2);
 
-        // when the ball hits the top of a paddle we want the ball, to take a -45degees angle
-        // when the ball hits the center of the paddle we want the ball to take a 0degrees angle
-        // when the ball hits the bottom of the paddle we want the ball to take a 45degrees
-        // Math.PI/4 = 45degrees
         const angleRad = (Math.PI / 4) * collidePoint;
 
-        // change the X and Y velocity direction
         const direction = ball.x + ball.radius < width / 2 ? 1 : -1;
         ball.velocityX = direction * ball.speed * Math.cos(angleRad);
         ball.velocityY = ball.speed * Math.sin(angleRad);
-        if (ball.velocityY === 0) ball.velocityY = 1;
-
-        // speed up the ball everytime a paddle hits it.
-        ball.speed += 0.1;
+        ball.speed += 0.2;
       }
     }
 
-    // render function, the function that does al the drawing
     function render() {
       // clear the canvas
       drawRect(0, 0, width, height, "#000");
@@ -221,7 +212,7 @@ function PongContent() {
       axios
         .post("http://127.0.0.1:5000/getPos", {
           params: {
-            paddle: [com.x, com.y],
+            paddle: [com.x, com.y + (com.height * 1) / 2],
             ball: [ball.x, ball.y],
           },
         })
@@ -235,18 +226,119 @@ function PongContent() {
         });
     }
     //call the game function 50 times every 1 Sec
-    if (ref?.current) setInterval(game, 1000 / framePerSecond);
-  }, []);
+    if (ref?.current && !gameover) {
+      setLoop(setInterval(game, 1000 / framePerSecond));
+    }
+  }, [gameover]);
 
+  useEffect(() => {
+    if (gameover) {
+      clearInterval(loop);
+    }
+  }, [gameover]);
   return (
-    <canvas
-      ref={ref}
-      tabIndex="0"
-      onMouseMove={getMousePos}
-      id="pong"
-      width="600"
-      height="400"
-    />
+    <div style={{ position: "relative" }}>
+      {gameover && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            backgroundColor: "black",
+            width: 600,
+            height: 400,
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          <h1 style={{ paddingTop: "110px" }}>SCORE : {score}</h1>
+          <h1 style={{ paddingTop: "10px" }}>GAME OVER</h1>
+          <input
+            placeholder="Enter your username"
+            style={{
+              color: "black",
+              padding: "3px 10px",
+              marginTop: "10px",
+              textAlign: "center",
+              border: "none",
+            }}
+            onChange={(event) => {
+              const value = event.target.value;
+              if (value !== undefined) setUsername(value);
+            }}
+            value={username}
+            name="username"
+          ></input>
+          <div>
+            <button
+              onClick={(event) => {
+                if (username !== "")
+                  axios
+                    .post("http://127.0.0.1:5000/submitScore", {
+                      params: {
+                        username,
+                        score,
+                      },
+                    })
+                    .then(() => {
+                      setGameover(false);
+                      setScore(0);
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                    });
+                else {
+                  event.target.style.backgroundColor = "red";
+                  setTimeout(() => {
+                    event.target.style.backgroundColor = "white";
+                  }, 300);
+                }
+              }}
+              style={{
+                backgroundColor: "white",
+                color: "black",
+                padding: "3px 10px",
+                borderRadius: "5px",
+                margin: "auto",
+                marginTop: "10px",
+              }}
+            >
+              Submit
+            </button>
+            <button
+              onClick={() => {
+                setGameover(false);
+                setScore(0);
+              }}
+              style={{
+                backgroundColor: "white",
+                color: "black",
+                padding: "3px 10px",
+                borderRadius: "5px",
+                margin: "5px",
+              }}
+            >
+              Restart
+            </button>
+          </div>
+        </div>
+      )}
+      <canvas
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: -1,
+        }}
+        ref={ref}
+        tabIndex="0"
+        onMouseMove={getMousePos}
+        onTouchMove={getMousePos}
+        id="pong"
+        width="600"
+        height="400"
+      />
+    </div>
   );
 }
 

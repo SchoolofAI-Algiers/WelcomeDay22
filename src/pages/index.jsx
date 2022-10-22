@@ -1,8 +1,9 @@
 //import { useState } from "react";
 //import Greetings from "../sections/Greetings.jsx";
 import Head from "next/head";
-import { Pong } from "../components/Pong";
-import Challenges from "../sections/Challenges";
+// import { Pong } from "../components/Pong";
+// import { Scoreboard } from "../components/Scoreboard";
+// import Challenges from "../sections/Challenges";
 
 function App() {
   //const [count, setCount] = useState(0);
@@ -22,7 +23,8 @@ function App() {
         </button>
   </div>*/}
       {/* <Challenges /> */}
-      <Pong />
+      {/* <Pong /> */}
+      {/* <Scoreboard /> */}
     </>
   );
 }
