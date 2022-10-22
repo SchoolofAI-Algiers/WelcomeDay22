@@ -42,9 +42,7 @@ export default function Faq() {
         />
         <div className="bg-[#FFCC00] h-36 w-36 md:h-48 md:w-48 blur-[60px] md:blur-[100px] absolute top-0 -translate-x-1/2 left-1/2 -translate-y-1/2" />
         <div className="relative w-full flex flex-col items-center">
-          <h1 className="font-arcade text-xl md:text-2xl lg:text-3xl xl:text-4xl">
-            FAQ
-          </h1>
+          <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl">FAQ</h1>
         </div>
         {/* Question */}
         <div className=" w-full md:mt-24 mt-16 lg:px-32 md:px-24 sm:px-16 px-4">
@@ -55,14 +53,14 @@ export default function Faq() {
                 onMouseEnter={() => setHoverFaq(index)}
                 onMouseLeave={() => setHoverFaq(-1)}
                 key={index}
-                className=" cursor-pointer md:px-10 px-2  py-6 md:py-8  md:my-10 my-8 rounded-xl  w-full bg-white24 flex justify-between items-center"
+                className="cursor-pointer md:px-6 px-4 py-4 md:py-6 md:my-10 my-8 rounded-xl w-full bg-white24 flex justify-between items-center"
               >
                 <div>
                   <p
                     className={
                       activeFaq.includes(index) || hoverFaq == index
-                        ? "xl:text-xl lg:text-lg md:text-md  text-xs text-bleu  font-normal"
-                        : "xl:text-xl lg:text-lg md:text-md   text-gold  font-normal"
+                        ? "xl:text-xl lg:text-base md:text-sm text-xs text-bleu font-normal pr-4"
+                        : "xl:text-xl lg:text-base md:text-sm text-xs text-gold font-normal pr-4"
                     }
                   >
                     {item.question}
@@ -72,7 +70,7 @@ export default function Faq() {
                       activeFaq.includes(index) ? "active" : "disabled",
                     ]}
                   >
-                    <p className="xl:text-xl lg:text-lg md:text-base sm:text-xs text-xs text-bleu md:mt-10 mt-2 md:ml-4 ml-2 font-thin">
+                    <p className="xl:text-xl lg:text-base md:text-sm text-xs text-bleu md:mt-10 mt-2 md:ml-4 ml-2 font-thin">
                       {item.answer}
                     </p>
                   </div>
