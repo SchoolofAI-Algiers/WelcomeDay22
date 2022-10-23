@@ -42,7 +42,7 @@ export default function Challenges() {
         <div className="w-full flex flex-col items-start mt-8 md:mt-12 lg:mt-24">
           <div>
             <div className="lg:text-xl md:text-lg text-sm   ">
-              <h2>let's do some</h2>
+              <h2>lets do some</h2>
               <h2 className="text-[#E6A2C7] lg:text-2xl sm:text-xl">challenges !</h2>
             </div>
           </div>

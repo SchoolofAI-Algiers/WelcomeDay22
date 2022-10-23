@@ -25,8 +25,8 @@ function Events() {
     },
     {
       title: "Guide d’achat",
-      desc: "30/12/2021",
-      date: "Les meilleurs ensembles Apple",
+      desc: "Les meilleurs ensembles Apple",
+      date: "30/12/2021",
       picture: "bg-event4",
       width: "md:w-3/5 w-full",
     },

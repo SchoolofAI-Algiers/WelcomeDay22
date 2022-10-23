@@ -3,7 +3,7 @@ import mypic1 from "../public/brain.png";
 
 export default function Home() {
   return (
-    <div className="flex items-center mx-5 md:mx-auto h-screen pt-10" id="Home">
+    <div className="flex items-center mx-5 md:mx-auto pb-16  md:pb-10 pt-10 md:pt-24" id="Home">
       <div className="sm:px-4 text-white lg:w-4/6 sm:mx-2 md:ml-10 xl:ml-16">
         <h2 className="xl:text-4xl sm:text-3xl text-xl font-bold mb-8">
           SCHOOL OF AI ALGIERS
