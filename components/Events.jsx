@@ -1,7 +1,6 @@
-import React from "react";
 import ImageEvent from "./ImageEvent";
 
-function EventsSection() {
+function Events() {
   const events = [
     {
       title: "Reading Sessions",
@@ -19,7 +18,7 @@ function EventsSection() {
     },
     {
       title: "HAICK",
-      desc: "An AI hackathone ",
+      desc: "An AI hackathon",
       date: "Each year",
       picture: "bg-event3",
       width: "md:w-6/12 w-full",
@@ -36,7 +35,7 @@ function EventsSection() {
     <div>
       <div
         className="relative min-h-screen text-white p-6 md:p-10 overflow-hidden"
-        id="EventsS"
+        id="Events"
       >
         {/* {Header} */}
         <img
@@ -88,4 +87,4 @@ function EventsSection() {
   );
 }
 
-export default EventsSection;
+export default Events;
