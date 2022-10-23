@@ -47,14 +47,15 @@ function PongContextProvider({ children }) {
     width: 2,
     color: "WHITE",
   });
+  const [ai] = useState({ step: 5 });
   const value = useMemo(
-    () => ({ ball, user, com, net }),
-    [ball, user, com, net]
+    () => ({ ball, user, com, net, ai }),
+    [ball, user, com, net, ai]
   );
   return <PongContext.Provider value={value}>{children}</PongContext.Provider>;
 }
 function PongContent() {
-  const { ball, user, com, net } = useContext(PongContext);
+  const { ball, user, com, net, ai } = useContext(PongContext);
   const [gameover, setGameover] = useState(false);
   const [score, setScore] = useState(0);
   const [loop, setLoop] = useState(null);
@@ -72,11 +73,11 @@ function PongContent() {
   useEffect(() => {
     const ctx = ref.current?.getContext("2d");
     ctx.textAlign = "center";
-
-    // const hit = new Audio("sounds/hit.mp3");
-    // const wall = new Audio("sounds/wall.mp3");
-    // const userScore = new Audio("sounds/comScore.mp3");
-    // const comScore = new Audio("sounds/userScore.mp3");
+    let error = false;
+    const hit = new Audio("./sounds/hit.mp3");
+    const wall = new Audio("./sounds/wall.mp3");
+    const userScore = new Audio("./sounds/comScore.mp3");
+    const comScore = new Audio("./sounds/userScore.mp3");
     function drawRect(x, y, w, h, color) {
       ctx.fillStyle = color;
       ctx.fillRect(x, y, w, h);
@@ -130,20 +131,24 @@ function PongContent() {
     }
 
     function update(decision) {
-      if (ball.x - ball.radius < 0) {
-        console.log("com win");
+      if (
+        ball.x - ball.radius < 0 &&
+        (ball.y > user.y + user.height || ball.y < user.y)
+      ) {
         setScore(ball.score);
         ball.score = 0;
         com.score++;
-        // comScore.play();
+        comScore.play();
         resetBall();
         setGameover(true);
-      } else if (ball.x + ball.radius > width) {
-        console.log("user win");
+      } else if (
+        ball.x + ball.radius > width &&
+        (ball.y > com.y + com.height || ball.y < com.y)
+      ) {
         setScore(ball.score);
         ball.score = 0;
         user.score++;
-        // userScore.play();
+        userScore.play();
         resetBall();
         setGameover(true);
       }
@@ -154,28 +159,29 @@ function PongContent() {
       // simple AI
       // com.y += (ball.y - (com.y + com.height / 2)) * 0.1;
 
-      if (decision === 1) changePaddle(com, com.y - 5);
-      else if (decision === 2) changePaddle(com, com.y + 5);
+      if (decision === 1) changePaddle(com, com.y - ai.step);
+      else if (decision === 2) changePaddle(com, com.y + ai.step);
 
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > height) {
         ball.velocityY = -ball.velocityY;
-        // wall.play();
-      }
+        wall.play();
+        if (error) ball.y = ball.y < height / 2 ? 3 : height - 2;
+        error = true;
+      } else error = false;
 
       const player = ball.x + ball.radius < width / 2 ? user : com;
 
       if (collision(ball, player)) {
         ball.score++;
-        // hit.play();
+        hit.play();
         let collidePoint = ball.y - (player.y + player.height / 2);
         collidePoint = collidePoint / (player.height / 2);
-
         const angleRad = (Math.PI / 4) * collidePoint;
-
         const direction = ball.x + ball.radius < width / 2 ? 1 : -1;
         ball.velocityX = direction * ball.speed * Math.cos(angleRad);
         ball.velocityY = ball.speed * Math.sin(angleRad);
-        ball.speed += 0.2;
+        ball.speed += 0.1;
+        ai.step += 0.05;
       }
     }
 
@@ -212,13 +218,15 @@ function PongContent() {
       axios
         .post("http://127.0.0.1:5000/getPos", {
           params: {
-            paddle: [com.x, com.y + (com.height * 1) / 2],
-            ball: [ball.x, ball.y],
+            paddle: [
+              Math.round(com.x),
+              Math.round(com.y) + (com.height * 1) / 2,
+            ],
+            ball: [Math.round(ball.x), Math.round(ball.y)],
           },
         })
         .then(function (response) {
           const decision = parseInt(response.data);
-          // console.log(decision);
           update(decision);
         })
         .catch(function (error) {
