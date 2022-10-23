@@ -11,7 +11,7 @@ export default function App() {
     <div>
       <Home />
       <Events />
-      <Challenges />
+      <Challenges/>
       <LeaderBoard/>
       <Faq />
       <Contact />
