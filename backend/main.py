@@ -45,17 +45,17 @@ def home():
 @app.route('/getPos', methods=['POST'])
 def getPos():
     data = request.get_json()
-    ball = data["params"]['ball']
-    paddle = data["params"]["paddle"]
+    ball = data['ball']
+    paddle = data["paddle"]
     return str(test_ai(paddle, ball))
 
 
-@app.route('/submitScore', methods=['POST'])
-def submitScore():
+@app.route('/addScore', methods=['POST'])
+def addScore():
     try:
         data = request.get_json()
-        username = data["params"]['username']
-        score = data["params"]["score"]
+        username = data['username']
+        score = data["score"]
         scoreboard_ref.document().set(
             {"username": username, "score": score})
         return jsonify({"success": True}), 200

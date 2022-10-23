@@ -6,11 +6,13 @@ import {
   useMemo,
   useContext,
 } from "react";
+import { isMobile } from "react-device-detect";
+import { Slider } from "@mui/material";
 import axios from "axios";
 // number of frames per second
 const framePerSecond = 60;
-const width = "600";
-const height = "400";
+const width = 600;
+const height = 400;
 
 const PongContext = createContext({});
 function PongContextProvider({ children }) {
@@ -54,16 +56,25 @@ function PongContextProvider({ children }) {
   );
   return <PongContext.Provider value={value}>{children}</PongContext.Provider>;
 }
-function PongContent() {
+function PongContent({ setLoading }) {
   const { ball, user, com, net, ai } = useContext(PongContext);
   const [gameover, setGameover] = useState(false);
   const [score, setScore] = useState(0);
   const [loop, setLoop] = useState(null);
+  const [start, setStart] = useState(false);
+  const error = useRef(false);
   const [username, setUsername] = useState("");
+  const [value, setValue] = useState(height / 2 - user.height / 2);
+
+  useEffect(() => {
+    changePaddle(user, value);
+  }, [user, value]);
+
   const ref = useRef(null);
   function getMousePos(evt) {
     const rect = evt.target.getBoundingClientRect();
-    changePaddle(user, evt.clientY - rect.top - user.height / 2);
+    setValue(evt.clientY - rect.top - user.height / 2);
+    // changePaddle(user, evt.clientY - rect.top - user.height / 2);
   }
   function changePaddle(paddle, y) {
     if (y > 0 && y < height - paddle.height) paddle.y = y;
@@ -73,7 +84,6 @@ function PongContent() {
   useEffect(() => {
     const ctx = ref.current?.getContext("2d");
     ctx.textAlign = "center";
-    let error = false;
     const hit = new Audio("./sounds/hit.mp3");
     const wall = new Audio("./sounds/wall.mp3");
     const userScore = new Audio("./sounds/comScore.mp3");
@@ -165,9 +175,9 @@ function PongContent() {
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > height) {
         ball.velocityY = -ball.velocityY;
         wall.play();
-        if (error) ball.y = ball.y < height / 2 ? 3 : height - 2;
-        error = true;
-      } else error = false;
+        if (error.current) ball.y = ball.y < height / 2 ? 3 : height - 2;
+        error.current = true;
+      } else error.current = false;
 
       const player = ball.x + ball.radius < width / 2 ? user : com;
 
@@ -193,7 +203,7 @@ function PongContent() {
       // drawText(user.score, width / 4, height / 5);
 
       // draw ball score
-      drawText(ball.score, width / 2, height / 5);
+      !isMobile && drawText(ball.score, width / 2, height / 5);
 
       // draw the COM score to the right
       // drawText(com.score, (3 * width) / 4, height / 5);
@@ -217,13 +227,8 @@ function PongContent() {
     function sendPos() {
       axios
         .post("http://127.0.0.1:5000/getPos", {
-          params: {
-            paddle: [
-              Math.round(com.x),
-              Math.round(com.y) + (com.height * 1) / 2,
-            ],
-            ball: [Math.round(ball.x), Math.round(ball.y)],
-          },
+          paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
+          ball: [Math.round(ball.x), Math.round(ball.y)],
         })
         .then(function (response) {
           const decision = parseInt(response.data);
@@ -234,19 +239,123 @@ function PongContent() {
         });
     }
     //call the game function 50 times every 1 Sec
-    if (ref?.current && !gameover) {
+    if (ref?.current && !gameover && start) {
       setLoop(setInterval(game, 1000 / framePerSecond));
     }
-  }, [gameover]);
+  }, [
+    ai,
+    ball,
+    com,
+    gameover,
+    net.color,
+    net.height,
+    net.width,
+    net.x,
+    net.y,
+    start,
+    user,
+  ]);
 
   useEffect(() => {
     if (gameover) {
       clearInterval(loop);
     }
-  }, [gameover]);
+  }, [gameover, loop]);
   return (
-    <div style={{ position: "relative" }}>
+    <div
+      className="scale-[0.7] md:scale-100 ml-[300px] mt-[40px] rotate-90 md:m-auto lg:ml-[20%] md:rotate-0 "
+      style={{ position: "relative" }}
+    >
       {gameover && (
+        <div
+          className="-rotate-90 md:rotate-0 ml-20 md:ml-0 w-[400px] md:w-[600px]"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            backgroundColor: "rgba(0,0,0,1)",
+            height: 400,
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          <div>
+            <h1 style={{ paddingTop: "110px" }}>SCORE : {score}</h1>
+            <h1 style={{ paddingTop: "10px" }}>GAME OVER</h1>
+            <input
+              placeholder="Enter your username"
+              style={{
+                color: "black",
+                padding: "3px 10px",
+                marginTop: "10px",
+                textAlign: "center",
+                border: "none",
+              }}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (value !== undefined) setUsername(value);
+              }}
+              value={username}
+              name="username"
+            ></input>
+            <div>
+              <button
+                onClick={(event) => {
+                  if (username !== "")
+                    axios
+                      .post("http://127.0.0.1:5000/addScore", {
+                        username,
+                        score,
+                      })
+                      .then(() => {
+                        setLoading(true);
+                        setStart(false);
+                        setGameover(false);
+                        setScore(0);
+                        setValue(height / 2 - user.height / 2);
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  else {
+                    event.target.style.backgroundColor = "red";
+                    setTimeout(() => {
+                      event.target.style.backgroundColor = "white";
+                    }, 300);
+                  }
+                }}
+                style={{
+                  backgroundColor: "white",
+                  color: "black",
+                  padding: "3px 10px",
+                  borderRadius: "5px",
+                  margin: "auto",
+                  marginTop: "10px",
+                }}
+              >
+                Submit
+              </button>
+              <button
+                onClick={() => {
+                  setStart(false);
+                  setGameover(false);
+                  setScore(0);
+                }}
+                style={{
+                  backgroundColor: "white",
+                  color: "black",
+                  padding: "3px 10px",
+                  borderRadius: "5px",
+                  margin: "5px",
+                }}
+              >
+                Restart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {!start && (
         <div
           style={{
             position: "absolute",
@@ -259,101 +368,55 @@ function PongContent() {
             textAlign: "center",
           }}
         >
-          <h1 style={{ paddingTop: "110px" }}>SCORE : {score}</h1>
-          <h1 style={{ paddingTop: "10px" }}>GAME OVER</h1>
-          <input
-            placeholder="Enter your username"
-            style={{
-              color: "black",
-              padding: "3px 10px",
-              marginTop: "10px",
-              textAlign: "center",
-              border: "none",
+          <button
+            onClick={() => {
+              setStart(true);
             }}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (value !== undefined) setUsername(value);
-            }}
-            value={username}
-            name="username"
-          ></input>
-          <div>
-            <button
-              onClick={(event) => {
-                if (username !== "")
-                  axios
-                    .post("http://127.0.0.1:5000/submitScore", {
-                      params: {
-                        username,
-                        score,
-                      },
-                    })
-                    .then(() => {
-                      setGameover(false);
-                      setScore(0);
-                    })
-                    .catch(function (error) {
-                      console.log(error);
-                    });
-                else {
-                  event.target.style.backgroundColor = "red";
-                  setTimeout(() => {
-                    event.target.style.backgroundColor = "white";
-                  }, 300);
-                }
-              }}
-              style={{
-                backgroundColor: "white",
-                color: "black",
-                padding: "3px 10px",
-                borderRadius: "5px",
-                margin: "auto",
-                marginTop: "10px",
-              }}
-            >
-              Submit
-            </button>
-            <button
-              onClick={() => {
-                setGameover(false);
-                setScore(0);
-              }}
-              style={{
-                backgroundColor: "white",
-                color: "black",
-                padding: "3px 10px",
-                borderRadius: "5px",
-                margin: "5px",
-              }}
-            >
-              Restart
-            </button>
-          </div>
+            className="-rotate-90 md:rotate-0 m-auto mt-[200px] rounded-[5px] px-[10px] py-[3px] bg-white text-black hover:text-yellow-500"
+          >
+            Start
+          </button>
         </div>
       )}
       <canvas
+        className="rotate-180 md:rotate-0  border-white border-2"
         style={{
           position: "absolute",
           top: 0,
           left: 0,
-          zIndex: -1,
+          zIndex: -11,
         }}
         ref={ref}
         tabIndex="0"
         onMouseMove={getMousePos}
-        onTouchMove={getMousePos}
         id="pong"
         width="600"
         height="400"
       />
+      <Slider
+        className="absolute md:hidden text-white -rotate-90 left-[400px] top-[180px] w-[400px] "
+        width={500}
+        value={value + user.height / 2}
+        min={0}
+        max={height}
+        onChange={(evt, value) => {
+          if (value < height - user.height && start && !gameover)
+            setValue(value);
+        }}
+      />
+      <div>
+        <p className="-rotate-90 text-3xl absolute text-center  left-[270px] top-[180px] -z-10 md:-z-20">
+          {ball.score}
+        </p>
+      </div>
     </div>
   );
 }
 
-export function Pong() {
+export default function Pong({ setLoading }) {
   return (
     <PongContextProvider>
-      <PongContent />
+      <PongContent setLoading={setLoading} />
     </PongContextProvider>
   );
 }
