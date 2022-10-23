@@ -52,33 +52,36 @@ function Events() {
           <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             Events
           </h1>
-          <div className="w-full md:ml-20 flex flex-col items-start mt-8 md:mt-12 lg:mt-24">
-            <p className="text-lg md:text-2xl lg:text-2xl xl:text-2xl mt-10">
-              What do we do in SOAI?
-            </p>
-            <div className="lg:w-3/5 md:w-3/4 w-full">
-              <p className="lg:text-sm text-xs lg:leading-6 leading-5 md:max-w-2xl mt-4">
-                Our main goal is to help each other enhance our knowledge and
-                improve our skills in the field by organizing various amazing AI
-                events
+          <div className="sm:ml-14 lg:ml-8 xl:ml-20 w-full">
+            <div className="flex flex-col items-start mt-8 md:mt-12 lg:mt-24">
+              <p className="text-lg md:text-2xl lg:text-2xl xl:text-2xl mt-10">
+                What do we do in SOAI?
               </p>
+              <div className="lg:w-3/5 md:w-3/4 w-full">
+                <p className="lg:text-sm text-xs lg:leading-6 leading-5 md:max-w-2xl mt-4">
+                  Our main goal is to help each other enhance our knowledge and
+                  improve our skills in the field by organizing various amazing
+                  AI events
+                </p>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="md:flex my-10 space-y-5 md:space-y-0 md:gap-5 flex-wrap w-full">
+              {events.map((item, index) => {
+                return (
+                  <ImageEvent
+                    key={index}
+                    src={item.picture}
+                    title={item.title}
+                    date={item.date}
+                    desc={item.desc}
+                    width={item.width}
+                  />
+                );
+              })}
             </div>
           </div>
-        </div>
-        {/* Body */}
-        <div className="md:flex justify-center my-10 space-y-5 md:space-y-0 md:gap-5 flex-wrap w-full">
-          {events.map((item, index) => {
-            return (
-              <ImageEvent
-                key={index}
-                src={item.picture}
-                title={item.title}
-                date={item.date}
-                desc={item.desc}
-                width={item.width}
-              />
-            );
-          })}
         </div>
       </div>
     </div>
