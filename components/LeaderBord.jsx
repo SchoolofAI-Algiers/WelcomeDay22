@@ -11,7 +11,7 @@ export default function Challenges() {
     if (loading) {
       setScoreboard([]);
       axios
-        .get("http://127.0.0.1:5000/getScore")
+        .get("https://welcome-day-22.herokuapp.com/getScore")
         .then((response) => {
           // console.log(response.data);
           setScoreboard(response.data);
