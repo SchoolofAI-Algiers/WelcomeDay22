@@ -2,10 +2,13 @@ import { Link } from "react-scroll";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+
 const Navbar = () => {
   const [nav, setNav] = useState(false);
-  const [color, setColor] = useState("transparent");
-  const [textColor, setTextColor] = useState("white");
+
+  const [bg, setBg] = useState("bg-transparent");
+  const [txt, setTxt] = useState("text-white");
+  const [logo, setLogo] = useState("/soai_logo_white.svg");
 
   const navlinks = ["Home", "Events", "Challenges", "FAQ", "Contact"];
 
@@ -16,11 +19,13 @@ const Navbar = () => {
   useEffect(() => {
     const changeColor = () => {
       if (window.scrollY >= 90) {
-        setColor("transparent");
-        setTextColor("#ffffff");
+        setBg("bg-white");
+        setLogo("/soai_logo_blue.svg");
+        setTxt("text-blue");
       } else {
-        setColor("transparent");
-        setTextColor("#ffffff");
+        setBg("bg-transparent");
+        setLogo("/soai_logo_white.svg");
+        setTxt("text-white");
       }
     };
     window.addEventListener("scroll", changeColor);
@@ -28,26 +33,22 @@ const Navbar = () => {
 
   return (
     <div
-      style={{
-        backgroundImage: `url(${require("../public/Asset.png")})`,
-        backgroundColor: `${color}`,
-      }}
-      className="fixed left-0 top-0 w-full z-50 ease-in duration-300"
+      className={`fixed left-0 top-0 w-full z-50 ease-in duration-300 ${bg}`}
     >
       <div className="flex justify-between items-center px-5 text-white">
         <Link
           to="Home"
-          offset={-80}
-          className="cursor-pointer invisible sm:visible block text-gray-900 hover:text-gray-900 focus:text-gray-900 justify-center items-center"
+          offset={-68}
+          className="cursor-pointer sm:w-auto w-40 -my-2 block text-gray-900 hover:text-gray-900 focus:text-gray-900 justify-center items-center"
         >
-          <Image src="/soai_logo_white.svg" alt="" width="250" height="100" />
+          <Image src={logo} alt="" width="200" height="80" />
         </Link>
-        <div style={{ color: `${textColor}` }} className="hidden lg:flex">
+        <div className={`hidden lg:flex ${txt}`}>
           {navlinks.map((section) => (
             <Link
               to={section}
               key={section}
-              offset={-80}
+              offset={-68}
               className="px-6 lg:text-base cursor-pointer font-bold hover:text-amber-400"
             >
               {section}
@@ -55,11 +56,11 @@ const Navbar = () => {
           ))}
         </div>
         {/* Mobile Button */}
-        <div onClick={handleNav} className="lg:hidden z-10">
+        <div onClick={handleNav} className="lg:hidden z-10 cursor-pointer">
           {nav ? (
-            <AiOutlineClose size={30} style={{ color: `${textColor}` }} />
+            <AiOutlineClose size={30} className="text-white" />
           ) : (
-            <AiOutlineMenu size={30} style={{ color: `${textColor}` }} />
+            <AiOutlineMenu size={30} className={txt} />
           )}
         </div>
         {/* Mobile Menu */}
