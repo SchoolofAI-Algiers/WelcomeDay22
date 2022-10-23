@@ -226,7 +226,7 @@ function PongContent({ setLoading }) {
     }
     function sendPos() {
       axios
-        .post("http://127.0.0.1:5000/getPos", {
+        .post("https://3024-105-235-128-86.eu.ngrok.io/getPos", {
           paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
           ball: [Math.round(ball.x), Math.round(ball.y)],
         })
@@ -319,10 +319,13 @@ function PongContent({ setLoading }) {
                 onClick={(event) => {
                   if (username !== "")
                     axios
-                      .post("http://127.0.0.1:5000/addScore", {
-                        username,
-                        score,
-                      })
+                      .post(
+                        "https://3024-105-235-128-86.eu.ngrok.io/addScore",
+                        {
+                          username,
+                          score,
+                        }
+                      )
                       .then(() => {
                         setLoading(true);
                         setStart(false);
@@ -393,17 +396,25 @@ function PongContent({ setLoading }) {
         width="600"
         height="400"
       />
-      <Slider
-        className="absolute md:hidden text-white -rotate-90 left-[400px] top-[180px] w-[400px] "
-        width={500}
-        value={value + user.height / 2}
-        min={0}
-        max={height}
-        onChange={(evt, value) => {
-          if (value < height - user.height && start && !gameover)
-            setValue(value);
-        }}
-      />
+      {isMobile && (
+        <Slider
+          className="absolute md:hidden -rotate-90 "
+          style={{
+            top: "180px",
+            left: "400px",
+            width: "400px",
+            color: "white",
+          }}
+          width={500}
+          value={value + user.height / 2}
+          min={0}
+          max={height}
+          onChange={(evt, value) => {
+            if (value < height - user.height && start && !gameover)
+              setValue(value);
+          }}
+        />
+      )}
       <div>
         <p className="-rotate-90 text-3xl absolute text-center  left-[270px] top-[180px] -z-10 md:-z-20">
           {ball.score}

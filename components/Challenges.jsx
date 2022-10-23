@@ -52,7 +52,6 @@ export default function Challenges() {
           />
         ))}
       </div> */}
-
       {/* <div className="flex justify-center gap-x-8 text-xs md:text-sm flex-col sm:flex-row">
         <input
           ref={ref}
@@ -70,8 +69,10 @@ export default function Challenges() {
           </div>
         </button>
       </div> */}
-
       <LeaderBoard />
+      {/* <div className="relative w-full flex flex-col items-center">
+        <h1 className="text-5xl mt-10">STAY TUNED</h1>
+      </div> */}
     </section>
   );
 }
