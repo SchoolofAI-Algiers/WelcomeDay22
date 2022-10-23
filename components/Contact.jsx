@@ -46,21 +46,21 @@ export default function Contact() {
           <div className="my-8 space-y-8 sm:space-y-0 m-auto">
             <div className="flex items-center my-5">
               <FaLocationArrow
-                className="md:text-4xl hidden sm:block"
+                className="md:text-4xl text-xl hidden sm:block"
                 size={30}
                 color="#FFF"
               />
-              <p className="font-light lg:text-md text-xxs sm:ml-5">
+              <p className="font-light lg:text-md text-xxs md:text-start text-center sm:ml-5">
                 Higher National School of Computer Science Oued Smar, Alger
               </p>
             </div>
-            <div className="flex items-center my-5">
+            <div className="flex items-center md:justify-start justify-center my-5 ">
               <FaEnvelope
                 className="md:text-4xl text-xl hidden sm:block"
                 size={30}
                 color="#FFF"
               />
-              <p className="font-light lg:text-md text-xxs sm:ml-5">
+              <p className="font-light lg:text-md text-xxs md:text-start text-center sm:ml-5">
                 schoolofai.algiers@esi.dz
               </p>
             </div>
