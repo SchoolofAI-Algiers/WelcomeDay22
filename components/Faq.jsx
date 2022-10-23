@@ -30,7 +30,7 @@ export default function Faq() {
   };
   return (
     <div id="FAQ">
-      <div className="relative min-h-screen text-white py-6 px-4 md:p-16 overflow-hidden">
+      <div className="relative md:min-h-screen text-white py-6 px-4 md:p-16 overflow-hidden">
         {/* {Header} */}
         <img
           src="/assets/Group6.png"
@@ -59,8 +59,8 @@ export default function Faq() {
                   <p
                     className={
                       activeFaq.includes(index) || hoverFaq == index
-                        ? "xl:text-xl lg:text-base md:text-sm text-xs text-bleu font-normal pr-4"
-                        : "xl:text-xl lg:text-base md:text-sm text-xs text-gold font-normal pr-4"
+                        ? "xl:text-xl lg:text-base md:text-sm text-xxs text-bleu font-normal pr-4"
+                        : "xl:text-xl lg:text-base md:text-sm text-xxs text-gold font-normal pr-4"
                     }
                   >
                     {item.question}
@@ -70,7 +70,7 @@ export default function Faq() {
                       activeFaq.includes(index) ? "active" : "disabled",
                     ]}
                   >
-                    <p className="xl:text-xl lg:text-base md:text-sm text-xs text-bleu md:mt-10 mt-2 md:ml-4 ml-2 font-thin">
+                    <p className="xl:text-xl lg:text-base md:text-sm text-xxs text-bleu md:mt-10 mt-2 md:ml-4 ml-2 font-thin">
                       {item.answer}
                     </p>
                   </div>

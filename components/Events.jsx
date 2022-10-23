@@ -24,7 +24,6 @@ function Events() {
       width: "md:w-6/12 w-full",
     },
     {
-
       title: "AI Day",
       desc: "Series of workshops and talks",
       date: "Each year",
@@ -59,7 +58,7 @@ function Events() {
                 What do we do in SOAI?
               </p>
               <div className="lg:w-3/5 md:w-3/4 w-full">
-                <p className="lg:text-sm text-xs lg:leading-6 leading-5 md:max-w-2xl mt-4">
+                <p className="lg:text-sm text-xxs lg:leading-6 leading-5 md:max-w-2xl mt-4">
                   Our main goal is to help each other enhance our knowledge and
                   improve our skills in the field by organizing various amazing
                   AI events

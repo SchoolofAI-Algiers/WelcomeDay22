@@ -50,7 +50,7 @@ export default function Contact() {
                 size={30}
                 color="#FFF"
               />
-              <p className="font-light lg:text-md text-xs sm:ml-5">
+              <p className="font-light lg:text-md text-xxs sm:ml-5">
                 Higher National School of Computer Science Oued Smar, Alger
               </p>
             </div>
@@ -60,7 +60,7 @@ export default function Contact() {
                 size={30}
                 color="#FFF"
               />
-              <p className="font-light lg:text-md text-xs sm:ml-5">
+              <p className="font-light lg:text-md text-xxs sm:ml-5">
                 schoolofai.algiers@esi.dz
               </p>
             </div>
