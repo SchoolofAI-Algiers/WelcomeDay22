@@ -69,10 +69,10 @@ export default function Challenges() {
           </div>
         </button>
       </div> */}
-      <LeaderBoard />
-      {/* <div className="relative w-full flex flex-col items-center">
+      {/* <LeaderBoard /> */}
+      <div className="relative w-full flex flex-col items-center">
         <h1 className="text-5xl mt-10">STAY TUNED</h1>
-      </div> */}
+      </div>
     </section>
   );
 }
