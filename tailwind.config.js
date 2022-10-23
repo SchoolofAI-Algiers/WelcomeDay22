@@ -7,6 +7,21 @@ module.exports = {
     fontFamily: {
       sans: ["Arcade Normal"],
     },
+    fontSize: {
+      xxxs : "0.5rem",
+      xxs : "0.7rem",
+      xs : "0.75 rem",
+      sm : "0.875rem",
+      base : "1rem",
+      lg : "1.125rem",
+      xl : "1.25rem",
+     "2xl" : "1.5rem",
+      "3xl" : "1.875rem",
+      "4xl" : "2.25rem",
+      "5xl" : "3rem",
+      "6xl" : "3.75rem"
+
+    },
     extend: {
       backgroundImage: {
         bg: "url('/assets/bg.png')",

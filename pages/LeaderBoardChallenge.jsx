@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import  data  from './data.json' 
-import  data1  from './data1.json' 
-import  data2  from './data2.json' 
+import  data  from '../components/data.json' 
+import  data1  from '../components/data1.json' 
+import  data2  from '../components/data2.json' 
 
-export default function Challenges({ game}) {
-  players;
-  game = 3;
-    if (game == 1){
+export default function LeaderBoardChallenge({game}) {
+  var players = data;
+      if (game == 1){
       players = data;
     }
     else if (game == 2)
@@ -17,16 +16,8 @@ export default function Challenges({ game}) {
     {
       players = data2;
     }
-    
       const [leadBoard,setLeadBoard] = useState('LB') ;
       const [width, setWidth] = useState(128);
-      if (typeof window != undefined) {
-        // browser code
-        const [width, setWidth] = useState(1280);
-      }
-      else {
-        const [width, setWidth] = useState(128);
-      }
       
       const breakpoint = 720;
     
@@ -48,13 +39,13 @@ export default function Challenges({ game}) {
     <div className=' mt-24 md:mt-0 mx-8 md:mx-0 md:col-start-22 md:col-span-4  md:row-start-2 md:row-span-5  flex justify-start   flex-col items-center'>
         <div className='w-9/12 h-8 lg:h-12 bg-LEADERBOARD 
         rounded-md flex justify-center z-10 items-center '> 
-        <h3 className='text-white font-normal lg:font-semibold  text-xs md:text-base   xl:text-lg'>{width < breakpoint ?'LeaderBoard':'leadBoard'}</h3></div>
+        <h3 className='text-white font-normal lg:font-semibold  text-xs md:text-base   xl:text-xs'>{width < breakpoint ?'LeaderBoard':'LeaderBoard'}</h3></div>
         <div className ={`' w-full border-2 border-LEADERBOARD -mt-6 z-9 pt-8 h-full  flex flex-row space-x-2 md:flex-col flex-wrap'
         }'
          `}>
         { players.sort((a,b) => b.points-a.points).map((player,rank) => (
 
-           <div key={player.id} className='text-white lg:pl-4 text-sm md:text-md xl:text-lg '> {`${rank+1} . ${player.name} ${width > breakpoint?player.points+'pts':''}`}</div>
+           <div key={player.id} className='text-white lg:pl-4 text-xs md:text-sm xl:text-md mb-5'> {`${rank+1} . ${player.name} ${width > breakpoint?player.points+'pts':''}`}</div>
         ))
         }
         </div>
