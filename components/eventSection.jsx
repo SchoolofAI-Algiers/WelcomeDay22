@@ -8,28 +8,28 @@ function EventsSection() {
       desc: "We discuss the content of a scientific paper",
       date: "Each Friday 7pm ",
       picture: "bg-event1",
-      width: "md:w-3/5 w-full",
+      width: "md:w-5/12 w-full",
     },
     {
       title: "AI2E",
       desc: "Full series of workshops ",
       date: "Each year",
       picture: "bg-event2",
-      width: "md:w-2/5 w-full",
+      width: "md:w-6/12 w-full",
     },
     {
       title: "HAICK",
       desc: "An AI hackathone ",
       date: "Each year",
       picture: "bg-event3",
-      width: "md:w-2/5 w-full",
+      width: "md:w-6/12 w-full",
     },
     {
       title: "Guide d’achat",
       desc: "30/12/2021",
       date: "Les meilleurs ensembles Apple",
       picture: "bg-event4",
-      width: "md:w-3/5 w-full",
+      width: "md:w-5/12 w-full",
     },
   ];
   return (
@@ -53,7 +53,7 @@ function EventsSection() {
           <h1 className=" text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             Events
           </h1>
-          <div className="w-full    flex flex-col items-start mt-8   md:mt-12 lg:mt-24">
+          <div className="w-full  md:ml-20  flex flex-col items-start mt-8   md:mt-12 lg:mt-24">
             <p className="text-lg md:text-2xl lg:text-2xl xl:text-2xl mt-10">
               What we do in SOIA?
             </p>
@@ -68,7 +68,7 @@ function EventsSection() {
         </div>
         {/* Body */}
         <div className="   my-10">
-          <div className="md:flex  justify-end my-10 flex-wrap  w-full ">
+          <div className="md:flex  justify-around my-10 flex-wrap  w-full ">
             {events.map((item, index) => {
               return (
                 <ImageEvent
