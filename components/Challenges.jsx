@@ -48,7 +48,7 @@ export default function Challenges() {
 
             <div>
               <h2 className="flex flex-wrap items-center gap-x-4">
-                Lets do some
+                Let&apos;s do some
                 <h2 className="text-[#E6A2C7]">challenges !</h2>
               </h2>
             </div>
