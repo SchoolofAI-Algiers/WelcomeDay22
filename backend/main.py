@@ -5,7 +5,7 @@ import neat
 from flask_cors import CORS
 from flask import Flask, redirect, url_for, request, render_template, jsonify
 from firebase_admin import credentials, firestore, initialize_app
-# os.chdir("./backend")
+os.chdir("./backend")
 
 app = Flask(__name__)
 CORS(app)
