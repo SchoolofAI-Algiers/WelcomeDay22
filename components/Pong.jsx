@@ -226,7 +226,7 @@ function PongContent({ setLoading }) {
     }
     function sendPos() {
       axios
-        .post("http://127.0.0.1:5000/getPos", {
+        .post("https://welcome-day-22.herokuapp.com/getPos", {
           paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
           ball: [Math.round(ball.x), Math.round(ball.y)],
         })
@@ -300,10 +300,26 @@ function PongContent({ setLoading }) {
             ></input>
             <div>
               <button
+                onClick={() => {
+                  setStart(false);
+                  setGameover(false);
+                  setScore(0);
+                }}
+                style={{
+                  backgroundColor: "white",
+                  color: "black",
+                  padding: "3px 10px",
+                  borderRadius: "5px",
+                  margin: "5px",
+                }}
+              >
+                Restart
+              </button>
+              <button
                 onClick={(event) => {
                   if (username !== "")
                     axios
-                      .post("http://127.0.0.1:5000/addScore", {
+                      .post("https://welcome-day-22.herokuapp.com/addScore", {
                         username,
                         score,
                       })
@@ -334,22 +350,6 @@ function PongContent({ setLoading }) {
                 }}
               >
                 Submit
-              </button>
-              <button
-                onClick={() => {
-                  setStart(false);
-                  setGameover(false);
-                  setScore(0);
-                }}
-                style={{
-                  backgroundColor: "white",
-                  color: "black",
-                  padding: "3px 10px",
-                  borderRadius: "5px",
-                  margin: "5px",
-                }}
-              >
-                Restart
               </button>
             </div>
           </div>

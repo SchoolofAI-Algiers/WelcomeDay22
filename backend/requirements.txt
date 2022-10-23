@@ -2,3 +2,5 @@ neat-python
 pygame
 flask
 flask_cors
+gunicorn
+firebase_admin
