@@ -30,7 +30,7 @@ export default function Faq() {
   };
   return (
     <div id="FAQ">
-      <div className=" relative min-h-screen text-white p-6 md:p-16 overflow-hidden">
+      <div className="relative min-h-screen text-white py-6 px-4 md:p-16 overflow-hidden">
         {/* {Header} */}
         <img
           src="/assets/Group6.png"
@@ -45,7 +45,7 @@ export default function Faq() {
           <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl">FAQ</h1>
         </div>
         {/* Question */}
-        <div className=" w-full md:mt-24 mt-16 lg:px-32 md:px-24 sm:px-16 px-4">
+        <div className="w-full md:mt-24 mt-16 lg:px-32 md:px-24 sm:px-16 px-4">
           {FaqList.map((item, index) => {
             return (
               <div

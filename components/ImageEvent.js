@@ -5,7 +5,7 @@ function ImageEvent({ src, title, date, desc, width }) {
     <div
       className={
         width +
-        "flex items-end lg:h-96 md:h-80 h-64 rounded-2xl bg-cover pb-4 " +
+        " flex items-end lg:h-96 md:h-80 h-64 rounded-2xl bg-cover pb-4 " +
         src
       }
     >
