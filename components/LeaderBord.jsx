@@ -11,7 +11,7 @@ export default function Challenges() {
     if (loading) {
       setScoreboard([]);
       axios
-        .get("https://92ba-105-235-128-237.eu.ngrok.io/getScore")
+        .get("http://127.0.0.1:5000/getScore")
         .then((response) => {
           // console.log(response.data);
           setScoreboard(response.data);

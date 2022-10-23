@@ -226,7 +226,7 @@ function PongContent({ setLoading }) {
     }
     function sendPos() {
       axios
-        .post("https://92ba-105-235-128-237.eu.ngrok.io/getPos", {
+        .post("http://127.0.0.1:5000/getPos", {
           paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
           ball: [Math.round(ball.x), Math.round(ball.y)],
         })
@@ -319,13 +319,10 @@ function PongContent({ setLoading }) {
                 onClick={(event) => {
                   if (username !== "")
                     axios
-                      .post(
-                        "https://92ba-105-235-128-237.eu.ngrok.io/addScore",
-                        {
-                          username,
-                          score,
-                        }
-                      )
+                      .post("http://127.0.0.1:5000/addScore", {
+                        username,
+                        score,
+                      })
                       .then(() => {
                         setLoading(true);
                         setStart(false);
