@@ -10,15 +10,16 @@ export default function Challenges() {
   useEffect(() => {
     if (loading) {
       setScoreboard([]);
-      axios
-        .get("https://3024-105-235-128-86.eu.ngrok.io/getScore")
-        .then((response) => {
-          // console.log(response.data);
-          setScoreboard(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      // axios
+      //   .get("http://localhost:5000/getScore")
+      //   .then((response) => {
+      //     // console.log(response.data);
+      //     alert("tets");
+      //     setScoreboard(response.data);
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
       setLoading(false);
     }
   }, [loading]);

@@ -9,6 +9,7 @@ import {
 import { isMobile } from "react-device-detect";
 import { Slider } from "@mui/material";
 import axios from "axios";
+import { io } from "socket.io-client";
 // number of frames per second
 const framePerSecond = 60;
 const width = 600;
@@ -62,15 +63,28 @@ function PongContent({ setLoading }) {
   const [score, setScore] = useState(0);
   const [loop, setLoop] = useState(null);
   const [start, setStart] = useState(false);
+  const [startWindow, setStartWindow] = useState(true);
   const error = useRef(false);
   const [username, setUsername] = useState("");
   const [value, setValue] = useState(height / 2 - user.height / 2);
-
+  const [socket, setSocket] = useState(null);
   useEffect(() => {
     changePaddle(user, value);
   }, [user, value]);
 
-  const ref = useRef(null);
+  useEffect(() => {
+    const socket = io("localhost:5000/", {
+      transports: ["websocket"],
+      cors: {
+        origin: "http://localhost:3000/",
+      },
+    });
+    setSocket(socket);
+
+    return function cleanup() {
+      socket.disconnect();
+    };
+  }, []);
   function getMousePos(evt) {
     const rect = evt.target.getBoundingClientRect();
     setValue(evt.clientY - rect.top - user.height / 2);
@@ -82,24 +96,15 @@ function PongContent({ setLoading }) {
     if (y >= height - paddle.height) paddle.y = height - paddle.height;
   }
   useEffect(() => {
-    const ctx = ref.current?.getContext("2d");
-    ctx.textAlign = "center";
     const hit = new Audio("./sounds/hit.mp3");
     const wall = new Audio("./sounds/wall.mp3");
     const userScore = new Audio("./sounds/comScore.mp3");
     const comScore = new Audio("./sounds/userScore.mp3");
-    function drawRect(x, y, w, h, color) {
-      ctx.fillStyle = color;
-      ctx.fillRect(x, y, w, h);
-    }
-
-    function drawArc(x, y, r, color) {
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2, true);
-      ctx.closePath();
-      ctx.fill();
-    }
+    socket &&
+      socket.on("pong", (decision) => {
+        console.log("update");
+        update(decision);
+      });
 
     function resetBall() {
       ball.speed = 8;
@@ -108,19 +113,6 @@ function PongContent({ setLoading }) {
       ball.velocityX = (Math.round(Math.random()) * 2 - 1) * 4;
       ball.velocityY = (Math.round(Math.random()) * 2 - 1) * Math.random() * 3;
     }
-
-    function drawNet() {
-      for (let i = 0; i <= height; i += 15) {
-        drawRect(net.x, net.y + i, net.width, net.height, net.color);
-      }
-    }
-
-    function drawText(text, x, y) {
-      ctx.fillStyle = "#FFF";
-      ctx.font = "75px fantasy";
-      ctx.fillText(text, x, y);
-    }
-
     function collision(b, p) {
       p.top = p.y;
       p.bottom = p.y + p.height;
@@ -194,6 +186,37 @@ function PongContent({ setLoading }) {
         ai.step += 0.05;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const ctx = ref.current?.getContext("2d");
+    ctx.textAlign = "center";
+    function drawRect(x, y, w, h, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, w, h);
+    }
+
+    function drawArc(x, y, r, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawNet() {
+      for (let i = 0; i <= height; i += 15) {
+        drawRect(net.x, net.y + i, net.width, net.height, net.color);
+      }
+    }
+
+    function drawText(text, x, y) {
+      ctx.fillStyle = "#FFF";
+      ctx.font = "75px fantasy";
+      ctx.fillText(text, x, y);
+    }
 
     function render() {
       // clear the canvas
@@ -222,38 +245,56 @@ function PongContent({ setLoading }) {
     }
     function game() {
       sendPos();
+      console.log("game");
       if (ctx) render();
     }
     function sendPos() {
-      axios
-        .post("https://3024-105-235-128-86.eu.ngrok.io/getPos", {
-          paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
-          ball: [Math.round(ball.x), Math.round(ball.y)],
-        })
-        .then(function (response) {
-          const decision = parseInt(response.data);
-          update(decision);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      socket.emit("pong", {
+        paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
+        ball: [Math.round(ball.x), Math.round(ball.y)],
+      });
+
+      // axios
+      //   .post("http://127.0.0.1:5000/getPos", {
+      //     paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
+      //     ball: [Math.round(ball.x), Math.round(ball.y)],
+      //   })
+      //   .then(function (response) {
+      //     const decision = parseInt(response.data);
+      //     update(decision);
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
     }
     //call the game function 50 times every 1 Sec
-    if (ref?.current && !gameover && start) {
+    if (ref?.current && start) {
+      setStart(false);
       setLoop(setInterval(game, 1000 / framePerSecond));
     }
   }, [
-    ai,
-    ball,
-    com,
-    gameover,
-    net.color,
-    net.height,
-    net.width,
+    start,
+    socket,
     net.x,
     net.y,
-    start,
-    user,
+    net.width,
+    net.height,
+    net.color,
+    ball.score,
+    ball.x,
+    ball.y,
+    ball.radius,
+    ball.color,
+    user.x,
+    user.y,
+    user.width,
+    user.height,
+    user.color,
+    com.x,
+    com.y,
+    com.width,
+    com.height,
+    com.color,
   ]);
 
   useEffect(() => {
@@ -301,8 +342,8 @@ function PongContent({ setLoading }) {
             <div>
               <button
                 onClick={() => {
-                  setStart(false);
                   setGameover(false);
+                  setStartWindow(true);
                   setScore(0);
                 }}
                 style={{
@@ -319,17 +360,14 @@ function PongContent({ setLoading }) {
                 onClick={(event) => {
                   if (username !== "")
                     axios
-                      .post(
-                        "https://3024-105-235-128-86.eu.ngrok.io/addScore",
-                        {
-                          username,
-                          score,
-                        }
-                      )
+                      .post("http://localhost:5000/addScore", {
+                        username,
+                        score,
+                      })
                       .then(() => {
                         setLoading(true);
-                        setStart(false);
                         setGameover(false);
+                        setStartWindow(true);
                         setScore(0);
                         setValue(height / 2 - user.height / 2);
                       })
@@ -358,7 +396,7 @@ function PongContent({ setLoading }) {
           </div>
         </div>
       )}
-      {!start && (
+      {startWindow && (
         <div
           style={{
             position: "absolute",
@@ -374,6 +412,7 @@ function PongContent({ setLoading }) {
           <button
             onClick={() => {
               setStart(true);
+              setStartWindow(false);
             }}
             className="-rotate-90 md:rotate-0 m-auto mt-[200px] rounded-[5px] px-[10px] py-[3px] bg-white text-black hover:text-yellow-500"
           >

@@ -1,14 +1,18 @@
 
 import os
 import pickle
+from flask_socketio import SocketIO, emit
 import neat
 from flask_cors import CORS
 from flask import Flask, redirect, url_for, request, render_template, jsonify
 from firebase_admin import credentials, firestore, initialize_app
-os.chdir("./backend")
+# os.chdir("./backend")
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+
 # Initialize Firestore DB
 cred = credentials.Certificate("cred.json")
 initialize_app(cred)
@@ -35,13 +39,25 @@ def test_ai(paddle, ball):
     return decision
 
 
-app = Flask(__name__)
-CORS(app)
+# @socketio.on("connect")
+# def connected():
+#     print(request.sid)
+#     print("client has connected")
+#     emit("connect", {"data": f"id: {request.sid} is connected"})
 
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+@socketio.on("pong")
+def pong(data):
+    ball = data['ball']
+    paddle = data["paddle"]
+    emit("pong",  test_ai(paddle, ball))
+
+
+# @socketio.on("disconnect")
+# def disconnected():
+#     """event listener when client disconnects to the server"""
+#     print("user disconnected")
+#     emit("disconnect", f"user {request.sid} disconnected", broadcast=True)
 
 
 @app.route('/getPos', methods=['POST'])
@@ -75,4 +91,4 @@ def getScore():
 
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app, port=5000)

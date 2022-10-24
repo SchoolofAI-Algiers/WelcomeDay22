@@ -4,3 +4,4 @@ flask
 flask_cors
 gunicorn
 firebase_admin
+flask_socketio
