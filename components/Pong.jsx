@@ -11,7 +11,7 @@ import { Slider } from "@mui/material";
 import axios from "axios";
 import { io } from "socket.io-client";
 // number of frames per second
-const framePerSecond = 50;
+const framePerSecond = 60;
 const width = 600;
 const height = 400;
 
@@ -24,7 +24,7 @@ function PongContextProvider({ children }) {
     radius: 7,
     velocityX: 4,
     velocityY: 4,
-    speed: 9,
+    speed: 8,
     color: "WHITE",
   });
   const [user] = useState({
@@ -50,7 +50,7 @@ function PongContextProvider({ children }) {
     width: 2,
     color: "WHITE",
   });
-  const [ai] = useState({ step: 7 });
+  const [ai] = useState({ step: 5 });
   const value = useMemo(
     () => ({ ball, user, com, net, ai }),
     [ball, user, com, net, ai]
@@ -73,7 +73,7 @@ function PongContent({ setLoading }) {
   }, [user, value]);
 
   useEffect(() => {
-    const socket = io("https://805b-105-235-130-142.eu.ngrok.io", {
+    const socket = io("https://864d-105-235-130-142.eu.ngrok.io", {
       transports: ["websocket"],
     });
     setSocket(socket);
@@ -98,7 +98,6 @@ function PongContent({ setLoading }) {
     const comScore = new Audio("./sounds/userScore.mp3");
     socket &&
       socket.on("pong", (decision) => {
-        console.log("update");
         update(decision);
       });
 
@@ -241,29 +240,15 @@ function PongContent({ setLoading }) {
     }
     function game() {
       sendPos();
-      console.log("game");
       if (ctx) render();
     }
     function sendPos() {
       socket.emit("pong", {
-        paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
-        ball: [Math.round(ball.x), Math.round(ball.y)],
+        paddle: [com.x, com.y + com.height / 2],
+        ball: [ball.x, ball.y],
       });
-
-      // axios
-      //   .post("http://127.0.0.1:5000/getPos", {
-      //     paddle: [Math.round(com.x), Math.round(com.y) + (com.height * 1) / 2],
-      //     ball: [Math.round(ball.x), Math.round(ball.y)],
-      //   })
-      //   .then(function (response) {
-      //     const decision = parseInt(response.data);
-      //     update(decision);
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
     }
-    //call the game function 50 times every 1 Sec
+
     if (ref?.current && start) {
       setStart(false);
       setLoop(setInterval(game, 1000 / framePerSecond));
@@ -357,7 +342,7 @@ function PongContent({ setLoading }) {
                   if (username !== "")
                     axios
                       .post(
-                        "https://805b-105-235-130-142.eu.ngrok.io/addScore",
+                        "https://864d-105-235-130-142.eu.ngrok.io/addScore",
                         {
                           username,
                           score,
