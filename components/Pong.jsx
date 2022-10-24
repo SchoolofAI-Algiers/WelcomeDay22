@@ -433,8 +433,7 @@ function PongContent({ setLoading }) {
           min={0}
           max={height}
           onChange={(evt, value) => {
-            if (value < height - user.height && start && !gameover)
-              setValue(value);
+            if (value < height - user.height && !gameover) setValue(value);
           }}
         />
       )}
