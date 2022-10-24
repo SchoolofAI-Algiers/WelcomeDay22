@@ -39,11 +39,11 @@ def test_ai(paddle, ball):
     return decision
 
 
-# @socketio.on("connect")
-# def connected():
-#     print(request.sid)
-#     print("client has connected")
-#     emit("connect", {"data": f"id: {request.sid} is connected"})
+@socketio.on("connect")
+def connected():
+    print(request.sid)
+    print("client has connected")
+    emit("connect", {"data": f"id: {request.sid} is connected"})
 
 
 @socketio.on("pong")
@@ -53,11 +53,11 @@ def pong(data):
     emit("pong",  test_ai(paddle, ball))
 
 
-# @socketio.on("disconnect")
-# def disconnected():
-#     """event listener when client disconnects to the server"""
-#     print("user disconnected")
-#     emit("disconnect", f"user {request.sid} disconnected", broadcast=True)
+@socketio.on("disconnect")
+def disconnected():
+    """event listener when client disconnects to the server"""
+    print("user disconnected")
+    emit("disconnect", f"user {request.sid} disconnected", broadcast=True)
 
 
 @app.route('/getPos', methods=['POST'])

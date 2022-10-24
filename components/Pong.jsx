@@ -11,7 +11,7 @@ import { Slider } from "@mui/material";
 import axios from "axios";
 import { io } from "socket.io-client";
 // number of frames per second
-const framePerSecond = 60;
+const framePerSecond = 50;
 const width = 600;
 const height = 400;
 
@@ -24,7 +24,7 @@ function PongContextProvider({ children }) {
     radius: 7,
     velocityX: 4,
     velocityY: 4,
-    speed: 8,
+    speed: 9,
     color: "WHITE",
   });
   const [user] = useState({
@@ -50,7 +50,7 @@ function PongContextProvider({ children }) {
     width: 2,
     color: "WHITE",
   });
-  const [ai] = useState({ step: 5 });
+  const [ai] = useState({ step: 7 });
   const value = useMemo(
     () => ({ ball, user, com, net, ai }),
     [ball, user, com, net, ai]
@@ -73,11 +73,8 @@ function PongContent({ setLoading }) {
   }, [user, value]);
 
   useEffect(() => {
-    const socket = io("localhost:5000/", {
+    const socket = io("https://805b-105-235-130-142.eu.ngrok.io", {
       transports: ["websocket"],
-      cors: {
-        origin: "http://localhost:3000/",
-      },
     });
     setSocket(socket);
 
@@ -88,7 +85,6 @@ function PongContent({ setLoading }) {
   function getMousePos(evt) {
     const rect = evt.target.getBoundingClientRect();
     setValue(evt.clientY - rect.top - user.height / 2);
-    // changePaddle(user, evt.clientY - rect.top - user.height / 2);
   }
   function changePaddle(paddle, y) {
     if (y > 0 && y < height - paddle.height) paddle.y = y;
@@ -360,10 +356,13 @@ function PongContent({ setLoading }) {
                 onClick={(event) => {
                   if (username !== "")
                     axios
-                      .post("http://localhost:5000/addScore", {
-                        username,
-                        score,
-                      })
+                      .post(
+                        "https://805b-105-235-130-142.eu.ngrok.io/addScore",
+                        {
+                          username,
+                          score,
+                        }
+                      )
                       .then(() => {
                         setLoading(true);
                         setGameover(false);
