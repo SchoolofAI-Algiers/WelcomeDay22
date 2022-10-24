@@ -50,7 +50,7 @@ function PongContextProvider({ children }) {
     width: 2,
     color: "WHITE",
   });
-  const [ai] = useState({ step: 5 });
+  const [ai] = useState({ step: 7 });
   const value = useMemo(
     () => ({ ball, user, com, net, ai }),
     [ball, user, com, net, ai]
@@ -156,8 +156,16 @@ function PongContent({ setLoading }) {
       // simple AI
       // com.y += (ball.y - (com.y + com.height / 2)) * 0.1;
 
-      if (decision === 1) changePaddle(com, com.y - ai.step);
-      else if (decision === 2) changePaddle(com, com.y + ai.step);
+      if (decision === 1)
+        changePaddle(
+          com,
+          ball.y > com.y + com.height / 2 ? com.y + 2 : com.y - ai.step
+        );
+      else if (decision === 2)
+        changePaddle(
+          com,
+          ball.y < com.y + com.height / 2 ? com.y - 2 : com.y + ai.step
+        );
 
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > height) {
         ball.velocityY = -ball.velocityY;
@@ -178,7 +186,7 @@ function PongContent({ setLoading }) {
         ball.velocityX = direction * ball.speed * Math.cos(angleRad);
         ball.velocityY = ball.speed * Math.sin(angleRad);
         ball.speed += 0.1;
-        ai.step += 0.05;
+        ai.step += 0.2;
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -433,7 +441,8 @@ function PongContent({ setLoading }) {
           min={0}
           max={height}
           onChange={(evt, value) => {
-            if (value < height - user.height && !gameover) setValue(value);
+            if (value < height - user.height && !startWindow && !gameover)
+              setValue(value);
           }}
         />
       )}
