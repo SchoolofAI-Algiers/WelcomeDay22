@@ -15,9 +15,7 @@ export default function Challenges() {
         .then((response) => {
           setScoreboard(response.data);
         })
-        .catch(function (error) {
-          console.log(error);
-        });
+        .catch(function (error) {});
       setLoading(false);
     }
   }, [loading]);
