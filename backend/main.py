@@ -53,6 +53,14 @@ def pong(data):
     emit("pong",  test_ai(paddle, ball))
 
 
+@socketio.on("score")
+def pong(data):
+    username = data['username']
+    score = data["score"]
+    scoreboard_ref.document().set(
+        {"username": username, "score": score})
+
+
 @socketio.on("disconnect")
 def disconnected():
     """event listener when client disconnects to the server"""
@@ -60,25 +68,25 @@ def disconnected():
     emit("disconnect", f"user {request.sid} disconnected", broadcast=True)
 
 
-@app.route('/getPos', methods=['POST'])
-def getPos():
-    data = request.get_json()
-    ball = data['ball']
-    paddle = data["paddle"]
-    return str(test_ai(paddle, ball))
+# @app.route('/getPos', methods=['POST'])
+# def getPos():
+#     data = request.get_json()
+#     ball = data['ball']
+#     paddle = data["paddle"]
+#     return str(test_ai(paddle, ball))
 
 
-@app.route('/addScore', methods=['POST'])
-def addScore():
-    try:
-        data = request.get_json()
-        username = data['username']
-        score = data["score"]
-        scoreboard_ref.document().set(
-            {"username": username, "score": score})
-        return jsonify({"success": True}), 200
-    except Exception as e:
-        return f"An Error Occurred: {e}"
+# @app.route('/addScore', methods=['POST'])
+# def addScore():
+#     try:
+#         data = request.get_json()
+#         username = data['username']
+#         score = data["score"]
+#         scoreboard_ref.document().set(
+#             {"username": username, "score": score})
+#         return jsonify({"success": True}), 200
+#     except Exception as e:
+#         return f"An Error Occurred: {e}"
 
 
 @app.route('/getScore', methods=['GET'])

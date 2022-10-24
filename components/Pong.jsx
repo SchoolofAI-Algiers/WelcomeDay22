@@ -347,25 +347,33 @@ function PongContent({ setLoading }) {
               </button>
               <button
                 onClick={(event) => {
-                  if (username !== "")
-                    axios
-                      .post(
-                        "https://864d-105-235-130-142.eu.ngrok.io/addScore",
-                        {
-                          username,
-                          score,
-                        }
-                      )
-                      .then(() => {
-                        setLoading(true);
-                        setGameover(false);
-                        setStartWindow(true);
-                        setScore(0);
-                        setValue(height / 2 - user.height / 2);
-                      })
-                      .catch(function (error) {
-                        console.log(error);
-                      });
+                  if (username !== "") {
+                    socket && socket.emit("score", { username, score });
+                    setLoading(true);
+                    setGameover(false);
+                    setStartWindow(true);
+                    setScore(0);
+                    setValue(height / 2 - user.height / 2);
+                  }
+
+                  //   axios
+                  //     .post(
+                  //       "https://864d-105-235-130-142.eu.ngrok.io/addScore",
+                  //       {
+                  //         username,
+                  //         score,
+                  //       }
+                  //     )
+                  //     .then(() => {
+                  //       setLoading(true);
+                  //       setGameover(false);
+                  //       setStartWindow(true);
+                  //       setScore(0);
+                  //       setValue(height / 2 - user.height / 2);
+                  //     })
+                  //     .catch(function (error) {
+                  //       console.log(error);
+                  //     });
                   else {
                     event.target.style.backgroundColor = "red";
                     setTimeout(() => {
