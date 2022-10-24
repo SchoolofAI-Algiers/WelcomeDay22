@@ -3,9 +3,10 @@ import ChallengeCard from "./ChallengeCard";
 
 import LeaderBoard from "./LeaderBord.jsx";
 export default function Challenges() {
+  // wadjih add min-h-screen ki traja3 l game l Section pere
   return (
     <section
-      className="relative min-h-screen text-white overflow-hidden"
+      className="relative mb-16 text-white overflow-hidden"
       id="Challenges"
     >
       <div className="p-6 md:p-16">
@@ -70,8 +71,8 @@ export default function Challenges() {
         </button>
       </div> */}
       <LeaderBoard />
-      {/* <div className="relative w-full flex flex-col items-center">
-        <h1 className="text-5xl mt-10">STAY TUNED</h1>
+      {/* <div className="relative w-full justify-center flex flex-col items-center">
+        <h1 className="lg:text-5xl md:text-4xl text-2xl mt-10">STAY TUNED</h1>
       </div> */}
     </section>
   );
