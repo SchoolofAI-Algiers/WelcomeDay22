@@ -1,9 +1,20 @@
-import { useState, useRef } from "react";
-import ChallengeCard from "./ChallengeCard";
-
+import { useState, useRef, useEffect } from "react";
+// import ChallengeCard from "./ChallengeCard";
+import axios from "axios";
 import LeaderBoard from "./LeaderBord.jsx";
 export default function Challenges() {
+  const [status, setStatus] = useState(0);
   // wadjih add min-h-screen ki traja3 l game l Section pere
+  useEffect(() => {
+    axios
+      .get("https://864d-105-235-130-142.eu.ngrok.io/getScore")
+      .then(() => {
+        setStatus(1);
+      })
+      .catch(() => {
+        setStatus(2);
+      });
+  }, []);
   return (
     <section
       className="relative mb-16 text-white overflow-hidden"
@@ -70,10 +81,21 @@ export default function Challenges() {
           </div>
         </button>
       </div> */}
-      <LeaderBoard />
-      {/* <div className="relative w-full justify-center flex flex-col items-center">
-        <h1 className="lg:text-5xl md:text-4xl text-2xl mt-10">STAY TUNED</h1>
-      </div> */}
+      {status == 1 ? (
+        <LeaderBoard />
+      ) : status == 0 ? (
+        <div className="relative w-full justify-center flex flex-col items-center">
+          <h1 className="lg:text-5xl md:text-4xl text-2xl mt-10">
+            Loading ...
+          </h1>
+        </div>
+      ) : (
+        <div className="relative w-full justify-center flex flex-col items-center">
+          <h1 className="lg:text-5xl md:text-4xl text-2xl mt-10">
+            THE SERVER IS DOWN :(
+          </h1>
+        </div>
+      )}
     </section>
   );
 }
