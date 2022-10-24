@@ -9,8 +9,11 @@ from firebase_admin import credentials, firestore, initialize_app
 # os.chdir("./backend")
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
-socketio = SocketIO(app, cors_allowed_origins="*")
+CORS(app, resources={
+     r"/*": {"origins": [
+         "https://soai-welcomeday.herokuapp.com"]}})
+socketio = SocketIO(app, cors_allowed_origins=[
+                    "https://soai-welcomeday.herokuapp.com"])
 
 
 # Initialize Firestore DB
