@@ -6,8 +6,9 @@ import neat
 from flask_cors import CORS
 from flask import Flask, redirect, url_for, request, render_template, jsonify
 from firebase_admin import credentials, firestore, initialize_app
+from cryptography.fernet import Fernet
 # os.chdir("./backend")
-
+f = Fernet(b'ev_VlPPEAv2RrM_Jku49cjh583TU4u_XHydCogUcOIY=')
 app = Flask(__name__)
 CORS(app, resources={
      r"/*": {"origins": [
@@ -60,8 +61,9 @@ def pong(data):
 def pong(data):
     username = data['username']
     score = data["score"]
+    d = f.decrypt(score)
     scoreboard_ref.document().set(
-        {"username": username, "score": score})
+        {"username": username, "score": d.decode()})
 
 
 @socketio.on("disconnect")
